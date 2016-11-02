@@ -5,7 +5,7 @@ exports.isStar = false;
 exports.query = function (collection) {
     var arrayFunctions = [].slice.call(arguments, 1);
     arrayFunctions = sortArrayFunctions(arrayFunctions);
-    var newCollection = collection.slice();
+    var newCollection = JSON.parse(JSON.stringify(collection));
     arrayFunctions.forEach(function (func) {
         newCollection = func(newCollection);
     });
@@ -84,7 +84,9 @@ exports.format = function (property, formatter) {
 
     return function format(collection) {
         collection.forEach(function (friend) {
-            friend[property] = formatter(friend[property]);
+            if (friend.hasOwnProperty(property)) {
+                friend[property] = formatter(friend[property]);
+            }
         });
 
         return collection;
