@@ -12,6 +12,7 @@ exports.query = function (collection) {
 
     return newCollection;
 };
+
 function sortArrayFunctions(arrayFunctions) {
     var orderFunctions = { 'select': 3, 'filterIn': 1, 'sortBy': 2, 'format': 4, 'limit': 5 };
     arrayFunctions.sort(function (a, b) {
@@ -29,6 +30,7 @@ function sortArrayFunctions(arrayFunctions) {
 
     return arrayFunctions;
 }
+
 exports.select = function () {
     var selectArgs = [].slice.call(arguments);
 
@@ -59,6 +61,7 @@ exports.filterIn = function (property, values) {
         return arrayFriends;
     };
 };
+
 exports.sortBy = function (property, order) {
     var sign = 1;
     if (order === 'desc') {
@@ -80,6 +83,7 @@ exports.sortBy = function (property, order) {
         });
     };
 };
+
 exports.format = function (property, formatter) {
 
     return function format(collection) {
@@ -93,6 +97,7 @@ exports.format = function (property, formatter) {
 
     };
 };
+
 exports.limit = function (count) {
 
     return function limit(collection) {
