@@ -16,16 +16,8 @@ exports.query = function (collection) {
 function sortArrayFunctions(arrayFunctions) {
     var orderFunctions = { 'select': 3, 'filterIn': 1, 'sortBy': 2, 'format': 4, 'limit': 5 };
     arrayFunctions.sort(function (a, b) {
-        if (orderFunctions[a.name] > orderFunctions[b.name]) {
 
-            return 1;
-        }
-        if (orderFunctions[a.name] < orderFunctions[b.name]) {
-
-            return -1;
-        }
-
-        return 0;
+        return (orderFunctions[a.name] > orderFunctions[b.name]);
     });
 
     return arrayFunctions;
@@ -36,11 +28,11 @@ exports.select = function () {
 
     return function select(collection) {
         collection.forEach(function (friend) {
-            for (var key in friend) {
+            Object.keys(friend).forEach(function (key) {
                 if (selectArgs.indexOf(key) === -1) {
                     delete friend[key];
                 }
-            }
+            });
         });
 
         return collection;
@@ -51,35 +43,23 @@ exports.select = function () {
 exports.filterIn = function (property, values) {
 
     return function filterIn(collection) {
-        var arrayFriends = [];
-        collection.forEach(function (friend) {
-            if (values.indexOf(friend[property]) !== -1) {
-                arrayFriends.push(friend);
-            }
+        return collection.filter(function (friend) {
+            return values.indexOf(friend[property]) !== -1;
         });
-
-        return arrayFriends;
     };
 };
 
 exports.sortBy = function (property, order) {
-    var sign = 1;
-    if (order === 'desc') {
-        sign = -1;
-    }
 
     return function sortBy(collection) {
+
         return collection.sort(function (a, b) {
-            if (a[property] > b[property]) {
+            if (order === 'desc') {
 
-                return 1 * Number(sign);
-            }
-            if (a[property] < b[property]) {
-
-                return -1 * Number(sign);
+                return a[property] < b[property];
             }
 
-            return 0;
+            return a[property] > b[property];
         });
     };
 };
